@@ -65,16 +65,26 @@ def main():
         print(f"Skipped {skipped} malformed record(s)", file=sys.stderr)
     print(f"Scored all candidates in {time.time()-t2:.1f}s", file=sys.stderr)
 
-    results.sort(key=lambda x: x[1], reverse=True)
-    top = results[: args.top]
+    if not results:
+        print("No candidates scored — nothing to write.", file=sys.stderr)
+        sys.exit(1)
 
-    # scale scores to 0-1 with 4 decimals, ties broken by original order (already stable sort)
-    max_s = top[0][1] if top and top[0][1] > 0 else 1.0
+    max_s = max((s for _, s, _ in results), default=1.0) or 1.0
+    # round FIRST, then sort — the tie-break must be computed on the values
+    # actually written to the CSV, not the raw pre-rounding scores, otherwise
+    # two candidates that round to the same displayed score can still end up
+    # in the wrong order relative to the validator's candidate_id tie-break rule.
+    rounded = [
+        (cid, round(min(s / max_s, 1.0), 4), reasoning) for cid, s, reasoning in results
+    ]
+    rounded.sort(key=lambda x: (-x[1], x[0]))  # score desc, then candidate_id asc for ties
+    top = rounded[: args.top]
+
     with open(args.output, "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(["candidate_id", "rank", "score", "reasoning"])
         for i, (cid, s, reasoning) in enumerate(top, start=1):
-            writer.writerow([cid, i, round(min(s / max_s, 1.0), 4), reasoning])
+            writer.writerow([cid, i, s, reasoning])
 
     print(f"Wrote top {len(top)} candidates to {args.output}", file=sys.stderr)
     print(f"Total time: {time.time()-t0:.1f}s", file=sys.stderr)
