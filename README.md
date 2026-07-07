@@ -121,7 +121,7 @@ output/
 - Rule-based signal extraction relies on career-history free text; a
   learned classifier trained on labeled recruiter judgments would likely
   outperform hand-written keyword rules at scale, but no labeled data was
-  provided for this challenge.
+  provided for this challenge
 - `tech_lead_not_coding` and `title_chaser` heuristics are necessarily
   approximate given only structured career_history fields.
 - Honeypot detection is conservative by design (catches only clear
