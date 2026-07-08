@@ -4,6 +4,8 @@ Ranks candidates from the 100K-candidate pool against the "Senior AI
 Engineer — Founding Team" JD the way a strong recruiter would: by
 reasoning about actual fit, not by counting skill keywords.
 
+
+
 ## Why this beats keyword matching
 
 The JD itself calls out the trap: a candidate whose skills section lists
