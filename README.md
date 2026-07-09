@@ -4,8 +4,6 @@ Ranks candidates from the 100K-candidate pool against the "Senior AI
 Engineer — Founding Team" JD the way a strong recruiter would: by
 reasoning about actual fit, not by counting skill keywords.
 
-
-
 ## Why this beats keyword matching
 
 The JD itself calls out the trap: a candidate whose skills section lists
@@ -21,9 +19,11 @@ three things a keyword filter can't:
    search, evaluation-framework experience). We extract these as
    structured signals from each candidate's `career_history` and `skills`,
    not just their skills list.
+
 2. **Adds a semantic-similarity layer** (TF-IDF + LSA/TruncatedSVD) so
    candidates who describe equivalent work in different language still
    surface, without needing an exact keyword hit.
+
 3. **Weighs behavioral signals as an availability multiplier**, per the
    JD's explicit instruction: a perfect-on-paper candidate who's inactive
    or has a low recruiter-response-rate gets down-weighted, not excluded.
